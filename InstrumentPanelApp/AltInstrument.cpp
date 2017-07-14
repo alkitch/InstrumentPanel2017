@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "AltInstrument.h"
 
+//The Alitmeter 
 
 CAltInstrument::CAltInstrument()
 	:CInstrument(0.85f,ALTINSTRUMENT_ID)
