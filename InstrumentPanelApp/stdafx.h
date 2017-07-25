@@ -25,6 +25,7 @@
 #include <memory.h>
 #include <tchar.h>
 #include <process.h>
+#include <Shellapi.h>
 #include <Shlwapi.h>
 
 #include <atltrace.h>

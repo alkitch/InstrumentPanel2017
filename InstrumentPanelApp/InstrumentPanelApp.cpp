@@ -43,6 +43,7 @@ LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 unsigned int __stdcall Reader(void* context);
 bool				ReadConfiguration(HINSTANCE);
+int					ParseCommandline();
 
 
 const int TICKS_PER_SECOND = 60; // Update() rate per second
@@ -66,6 +67,9 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	if (ReadConfiguration(hInstance) == false)
 		return FALSE;
+
+	ParseCommandline();
+
 	// TODO: Place code here.
 	MSG msg;
 	HACCEL hAccelTable;
@@ -651,4 +655,42 @@ unsigned int __stdcall Reader(void* context)
 		}
 	}
 	return 0;
+}
+
+
+
+/*******************************************************
+WIN32 command line parser function
+********************************************************/
+int ParseCommandline()
+{
+	LPWSTR *szArglist;
+	int nArgs;
+	int i;
+
+	szArglist = CommandLineToArgvW(GetCommandLineW(), &nArgs);
+	if (NULL == szArglist)
+	{
+		//wprintf(L"CommandLineToArgvW failed\n");
+		return 0;
+	}
+	else
+	{
+		for (i = 1; i < nArgs; i++)
+		{
+			if (wcscmp(szArglist[i], L"/Design") == 0  || wcscmp(szArglist[i], L"-Design") == 0)
+			{
+				bDesigntime = true;
+			}
+		
+			ATLTRACE("%d: %ws\n", i, szArglist[i]);
+		}
+	}
+
+	// Free memory allocated for CommandLineToArgvW arguments.
+
+	LocalFree(szArglist);
+
+	return nArgs;
+
 }
