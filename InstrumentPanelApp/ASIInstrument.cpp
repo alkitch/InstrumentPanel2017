@@ -63,7 +63,7 @@ bool CASIInstrument::PtInBounds(POINT pt)
 
 HRESULT CASIInstrument::Initialise(CInstrumentPanelContext* pContext)
 {
-	HRESULT	hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0xFFFFFF)), &m_pInstrumentBrush);
+	HRESULT	hr = pContext->m_pRenderTarget->CreateSolidColorBrush(GetInstrumentColor(), &m_pInstrumentBrush);
 	if (SUCCEEDED(hr))
 			hr = CInstrument::Initialise(pContext);
 

@@ -3,7 +3,7 @@
 
 
 CHSIInstrument::CHSIInstrument()
-	:CInstrument(0.90f, HSIINSTRUMENT_ID )
+	:CInstrument(0.90f, HSIINSTRUMENT_ID)
 {
 	m_pInstrumentBrush = NULL;
 	m_pInstrumentCaseBrush = NULL;
@@ -11,7 +11,7 @@ CHSIInstrument::CHSIInstrument()
 	m_pHSIInnerClipper = NULL;
 
 	m_pInstrumentBitmap = NULL;
-	
+
 	m_pHSISkyBrush = NULL;
 	m_pHSIGroundBrush = NULL;
 
@@ -46,7 +46,7 @@ CHSIInstrument::CHSIInstrument(float scale)
 
 void CHSIInstrument::GetBounds(RECT* rect)
 {
-	if( rect != NULL)
+	if (rect != NULL)
 	{
 		float amplitude = GRATICULE_LENGTH * m_instrumentScale;
 		rect->left = (LONG)(m_xPosition - amplitude);
@@ -60,9 +60,9 @@ bool CHSIInstrument::PtInBounds(POINT pt)
 {
 	RECT r;
 	GetBounds(&r);
-	bool x = (pt.x >= r.left )&& (pt.x < r.right );
+	bool x = (pt.x >= r.left) && (pt.x < r.right);
 	bool y = (pt.y >= r.top) && (pt.y < r.bottom);
-	return ( x == true && y == true )?true:false;
+	return (x == true && y == true) ? true : false;
 }
 
 
@@ -75,15 +75,18 @@ HRESULT CHSIInstrument::Initialise(CInstrumentPanelContext* pContext)
 {
 
 	HRESULT	hr = CInstrument::Initialise(pContext);
-	if (SUCCEEDED(hr)){
+	if (SUCCEEDED(hr)) {
 		SafeRelease(&m_pInstrumentCardBrush);
-		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0x999999)), &m_pInstrumentCardBrush);
+
+		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(((BYTE)(153.0 * m_brightness) & 0xFF) << 16 | ((BYTE)(153.0 * m_brightness) & 0xFF) << 8 | ((BYTE)(153.0 * m_brightness) & 0xFF)), &m_pInstrumentCardBrush);
 	}
-	
+
 	if (SUCCEEDED(hr))
-		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(0xFFFFFF), &m_pInstrumentBrush);
+		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(GetInstrumentColor(), &m_pInstrumentBrush);
 	if (SUCCEEDED(hr))
-		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(0xF2EE05), &m_pGullWingBrush);
+		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(((BYTE)(242.0 * m_brightness) & 0xFF) << 16 | ((BYTE)(238.0 * m_brightness) & 0xFF) << 8 | ((BYTE)(5.0 * m_brightness) & 0xFF)), &m_pGullWingBrush);
+
+	//hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(0xF2EE05), &m_pGullWingBrush);
 	return CreateHSI(pContext);
 }
 
@@ -124,9 +127,9 @@ HRESULT CHSIInstrument::CreateHSIRollPointer(CInstrumentPanelContext* pContext)
 	if (SUCCEEDED(hr))
 	{
 		pSink->BeginFigure(
-			D2D1::Point2F(165 * m_instrumentScale,50 * m_instrumentScale),
+			D2D1::Point2F(165 * m_instrumentScale, 50 * m_instrumentScale),
 			D2D1_FIGURE_BEGIN_FILLED
-			);
+		);
 
 		pSink->AddLine(D2D1::Point2F(175 * m_instrumentScale, 37 * m_instrumentScale));
 		pSink->AddLine(D2D1::Point2F(185 * m_instrumentScale, 50 * m_instrumentScale));
@@ -148,7 +151,7 @@ HRESULT CHSIInstrument::CreateHSIGullWing(CInstrumentPanelContext* pContext)
 	}
 	if (SUCCEEDED(hr))
 	{
-		pSink->BeginFigure(D2D1::Point2F(-100 * m_instrumentScale, 0),D2D1_FIGURE_BEGIN_FILLED);
+		pSink->BeginFigure(D2D1::Point2F(-100 * m_instrumentScale, 0), D2D1_FIGURE_BEGIN_FILLED);
 
 		pSink->AddLine(D2D1::Point2F(-40 * m_instrumentScale, 0));
 		pSink->AddLine(D2D1::Point2F(-20 * m_instrumentScale, 20 * m_instrumentScale));
@@ -167,13 +170,16 @@ HRESULT CHSIInstrument::CreateHSIGullWing(CInstrumentPanelContext* pContext)
 
 HRESULT CHSIInstrument::CreateHSIBackgroundBrushes(CInstrumentPanelContext* pContext)
 {
-		HRESULT hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(0x00B4FF), &m_pHSISkyBrush);
 
-		if (SUCCEEDED(hr))
-		{
-			hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(0xB46C03), &m_pHSIGroundBrush);
 
-		}
+
+	HRESULT hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(((BYTE)(0.0 * m_brightness) & 0xFF) << 16 | ((BYTE)(180.0 * m_brightness) & 0xFF) << 8 | ((BYTE)(255.0 * m_brightness) & 0xFF)), &m_pHSISkyBrush);
+
+	if (SUCCEEDED(hr))
+	{
+		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(((BYTE)(180.0 * m_brightness) & 0xFF) << 16 | ((BYTE)(108.0 * m_brightness) & 0xFF) << 8 | ((BYTE)(3.0 * m_brightness) & 0xFF)), &m_pHSIGroundBrush);
+
+	}
 	return hr;
 }
 
@@ -187,7 +193,7 @@ HRESULT CHSIInstrument::CreateHSIInnerClipper(CInstrumentPanelContext* pContext)
 		D2D1::Point2F(0.0f, 0.0f),
 		138.0f*m_instrumentScale,
 		138.0f*m_instrumentScale
-		);
+	);
 	return pContext->m_pDirect2dFactory->CreateEllipseGeometry(&clip, &m_pHSIInnerClipper);
 }
 
@@ -202,7 +208,7 @@ HRESULT CHSIInstrument::CreateInstrumentBitmap(CInstrumentPanelContext* pContext
 	if (SUCCEEDED(hr))
 	{
 		pCompatibleRenderTarget->BeginDraw();
-		pCompatibleRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
+		pCompatibleRenderTarget->Clear(GetInstrumentColor());
 		pCompatibleRenderTarget->FillRectangle(D2D1::RectF(0.0f, 0.0f, 700.0f*m_instrumentScale, 349.3f*m_instrumentScale), m_pHSISkyBrush);
 		pCompatibleRenderTarget->FillRectangle(D2D1::RectF(0.0f, 350.8f*m_instrumentScale, 700.0f*m_instrumentScale, 700.0f*m_instrumentScale), m_pHSIGroundBrush);
 
@@ -212,14 +218,15 @@ HRESULT CHSIInstrument::CreateInstrumentBitmap(CInstrumentPanelContext* pContext
 		D2D1_RECT_F rectPull = D2D1::RectF((350.0f - 50.0f)* m_instrumentScale, (350.0f - (-79.0f*pitch_ratio))* m_instrumentScale, (350.0f + 50.0f)* m_instrumentScale, (350.0f - (-79.0f*pitch_ratio))* m_instrumentScale);
 		pCompatibleRenderTarget->DrawTextW(L"PULL", 4, pContext->m_pText18ptFormat, rectPull, m_pInstrumentBrush);
 
-		
+
 		//Draw pitch graticule
 		for (float pitch = 5.0f; pitch <= 25.0f; pitch += 5.0f)
 		{
 			float barwidth = 15.0f;
 			if (fmod(pitch, 10) == 0) { barwidth = 25.0f; }
-			pCompatibleRenderTarget->DrawLine(D2D1::Point2F( (350.0f * m_instrumentScale) -barwidth, (350.0f - (pitch*pitch_ratio))* m_instrumentScale), D2D1::Point2F((350.0f* m_instrumentScale) + barwidth, (350.0f - (pitch*pitch_ratio))* m_instrumentScale), m_pInstrumentBrush, 1.2f);
-			pCompatibleRenderTarget->DrawLine(D2D1::Point2F( (350.0f * m_instrumentScale) - barwidth, (350.0f - (-pitch)*pitch_ratio)* m_instrumentScale), D2D1::Point2F((350.0f* m_instrumentScale) + barwidth, (350.0f - ((-pitch)*pitch_ratio))* m_instrumentScale), m_pInstrumentBrush, 1.2f);
+			pCompatibleRenderTarget->DrawLine(D2D1::Point2F((350.0f * m_instrumentScale) - barwidth, (350.0f - (pitch*pitch_ratio))* m_instrumentScale), D2D1::Point2F((350.0f* m_instrumentScale) + barwidth, (350.0f - (pitch*pitch_ratio))* m_instrumentScale), m_pInstrumentBrush, 1.2f);
+			pCompatibleRenderTarget->DrawLine(D2D1::Point2F((350.0f * m_instrumentScale) - barwidth, (350.0f - (-pitch)*pitch_ratio)* m_instrumentScale), D2D1::Point2F((350.0f* m_instrumentScale) + barwidth, (350.0f - ((-pitch)*pitch_ratio))* m_instrumentScale), m_pInstrumentBrush, 1.2f);
+
 		}
 		pCompatibleRenderTarget->EndDraw();
 		// Retrieve the bitmap from the render target.
@@ -248,7 +255,7 @@ HRESULT CHSIInstrument::PreRender(CInstrumentPanelContext* pContext)
 	SetNudge();
 
 
-	
+
 	//Clipping Ellipse for out glass
 	D2D1_ELLIPSE instrumentCard = D2D1_ELLIPSE();
 	instrumentCard.point = D2D1::Point2F(0, 0);
@@ -278,7 +285,7 @@ HRESULT CHSIInstrument::PreRender(CInstrumentPanelContext* pContext)
 
 		//Translate outercard bitmap to center of the case
 		D2D1_RECT_F destRect = D2D1::RectF(0.0F, 0.0F, 350.0f* m_instrumentScale, 350.0f* m_instrumentScale);
-		D2D1_RECT_F srcRect = D2D1::RectF(175.0f* m_instrumentScale, 175.0f* m_instrumentScale, (350.0f* m_instrumentScale) +175.0f * m_instrumentScale, (350.0f* m_instrumentScale)+ 175.0f * m_instrumentScale);
+		D2D1_RECT_F srcRect = D2D1::RectF(175.0f* m_instrumentScale, 175.0f* m_instrumentScale, (350.0f* m_instrumentScale) + 175.0f * m_instrumentScale, (350.0f* m_instrumentScale) + 175.0f * m_instrumentScale);
 		pContext->m_pDeviceContext->DrawBitmap(m_pInstrumentBitmap, &destRect, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
 
 
@@ -286,9 +293,9 @@ HRESULT CHSIInstrument::PreRender(CInstrumentPanelContext* pContext)
 		float x, y, x1, y1;
 		y = x1 = x = 0;
 		y1 = -350.0f* m_instrumentScale;
-		pContext->m_pDeviceContext->DrawLine(D2D1::Point2F(x + (175.0f* m_instrumentScale), y+ (175.0f* m_instrumentScale)), D2D1::Point2F(x1 + (175.0f* m_instrumentScale), y1 + (175.0f* m_instrumentScale)), m_pInstrumentBrush,2.0f);
-		for (float rot = 10.0f; rot <= 30.0f; rot+= 10.0f)
-		{ 
+		pContext->m_pDeviceContext->DrawLine(D2D1::Point2F(x + (175.0f* m_instrumentScale), y + (175.0f* m_instrumentScale)), D2D1::Point2F(x1 + (175.0f* m_instrumentScale), y1 + (175.0f* m_instrumentScale)), m_pInstrumentBrush, 2.0f);
+		for (float rot = 10.0f; rot <= 30.0f; rot += 10.0f)
+		{
 			y = x1 = x = 0;	y1 = -350.0f* m_instrumentScale;
 			RotateLine(x, y, x1, y1, rot);
 			pContext->m_pDeviceContext->DrawLine(D2D1::Point2F(x + 175.0f* m_instrumentScale, y + 175.0f* m_instrumentScale), D2D1::Point2F(x1 + 175.0f* m_instrumentScale, y1 + 175.0f* m_instrumentScale), m_pInstrumentBrush, 1.5f);

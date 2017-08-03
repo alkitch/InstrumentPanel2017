@@ -91,7 +91,7 @@ HRESULT CClockInstrument::Initialise(CInstrumentPanelContext* pContext)
 {
 	HRESULT hr = CInstrument::Initialise(pContext);
 	if (SUCCEEDED(hr))
-			hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0xFFFFFF)), &m_pInstrumentBrush);
+			hr = pContext->m_pRenderTarget->CreateSolidColorBrush(GetInstrumentColor(), &m_pInstrumentBrush);
 
 	if (SUCCEEDED(hr))
 		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0xFF0000)), &m_pRedBrush);

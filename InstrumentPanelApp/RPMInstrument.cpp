@@ -63,7 +63,7 @@ HRESULT CRPMInstrument::Initialise(CInstrumentPanelContext* pContext)
 {
 	HRESULT hr = CInstrument::Initialise(pContext);
 	if (SUCCEEDED(hr))
-		HRESULT	hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0xFFFFFF)),&m_pInstrumentBrush);
+		HRESULT	hr = pContext->m_pRenderTarget->CreateSolidColorBrush(GetInstrumentColor(),&m_pInstrumentBrush);
 	
 	return CreateRPM(pContext);
 }

@@ -7,7 +7,7 @@ class CNudgeCollection;
 class CInstrumentPanel
 {
 public:
-	CInstrumentPanel(BOOL useTurnAndSlip,CNudgeCollection* nudges);
+	CInstrumentPanel(BOOL useTurnAndSlip,CNudgeCollection* nudges, double dBrightness);
 	~CInstrumentPanel();
 
 public:
@@ -21,6 +21,7 @@ public:
 	CInstrument* FindFocussedInstrument();
 	void SetAllInstrumentFocus(bool hasFocus);
 	void UpdateNudges(CNudgeCollection* nudges);
+
 public:
 	CInstrumentPanelContext m_context;
 private:

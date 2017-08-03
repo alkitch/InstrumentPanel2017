@@ -59,6 +59,9 @@ protected:
 	virtual void DrawInstrumentTitle(CInstrumentPanelContext* pContext, LPCWSTR szTitle, ID2D1SolidColorBrush* titleBrush);	
 	virtual void DrawInstrumentCase(CInstrumentPanelContext* pContext);
 
+	
+	D2D1::ColorF GetInstrumentColor();
+
 	ID2D1SolidColorBrush* m_pInstrumentCaseBrush;
 	ID2D1SolidColorBrush* m_pInstrumentCardBrush;
 	ID2D1SolidColorBrush* m_pInstrumentFocusBrush;
@@ -74,5 +77,7 @@ public:
 	bool m_bHasFocus;
 	float m_nudge_x;
 	float m_nudge_y;
+	
+	static double m_brightness;
 };
 

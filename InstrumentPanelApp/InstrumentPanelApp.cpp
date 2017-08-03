@@ -27,6 +27,7 @@ TCHAR szServerName[MAX_LOADSTRING];			// the main window class name
 DWORD dwWindowMode;
 UINT  uPort;
 BOOL  useTurnAndSlip;
+double  g_dBrightness;
 UINT  nBackgroundColor;
 UINT  nBackgroundCard;
 FLOAT dpiX = 1.0f;
@@ -244,6 +245,8 @@ bool ReadConfiguration(HINSTANCE hInstance)
 
 		bDefaultLayout = (BOOL)json.IntOf(L"configuration.defaultlayout");
 
+		g_dBrightness = (double)(json.IntOf(L"configuration.brightness") / 100.0);
+
 		LPCWSTR sgray = json.stringOf(L"configuration.backgroundgrey");
 		if (json.get_LastMethodSuccess() == true) {
 			int ngray = (int)ceil(255.0*_wtof(sgray));
@@ -346,7 +349,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 	// FLOAT ratio = 768.0f / 1366.0f;
 
-	theInstrumentPanel = new CInstrumentPanel(useTurnAndSlip,g_nudges);
+	theInstrumentPanel = new CInstrumentPanel(useTurnAndSlip,g_nudges, g_dBrightness);
 	theInstrumentPanel->Initialise();
 	theInstrumentPanel->GetDesktopDpi(dpiX, dpiY);
 

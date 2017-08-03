@@ -67,17 +67,11 @@ bool CCompassInstrument::PtInBounds(POINT pt)
 
 HRESULT CCompassInstrument::Initialise(CInstrumentPanelContext* pContext)
 {
-	HRESULT	hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0xFFFFFF)), &m_pInstrumentBrush);
+	HRESULT	hr = pContext->m_pRenderTarget->CreateSolidColorBrush(GetInstrumentColor(), &m_pInstrumentBrush);
 	
 	if (SUCCEEDED(hr))
-		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0xF6546A)), &m_pCardinalBrush);
+		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(((BYTE)(246.0 * m_brightness) & 0xFF) << 16 | ((BYTE)(84.0 * m_brightness) & 0xFF) << 8 | ((BYTE)(106.0 * m_brightness) & 0xFF)), &m_pCardinalBrush);
 
-	/*
-	if (SUCCEEDED(hr))
-		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0x000000)), &m_pInstrumentCaseBrush);
-	if (SUCCEEDED(hr))
-		hr = pContext->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0x555555)), &m_pInstrumentCardBrush);
-*/
 	hr = CInstrument::Initialise(pContext);
 
 	return CreateCompass(pContext);

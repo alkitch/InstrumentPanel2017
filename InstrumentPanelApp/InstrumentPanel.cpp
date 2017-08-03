@@ -16,7 +16,7 @@
 
 extern UINT nBackgroundColor;
 
-CInstrumentPanel::CInstrumentPanel(BOOL useTurnAndSlip, CNudgeCollection* nudges)
+CInstrumentPanel::CInstrumentPanel(BOOL useTurnAndSlip, CNudgeCollection* nudges, double dBrightness)
 {
 	m_pSceneBitmap = NULL;
 
@@ -28,6 +28,8 @@ CInstrumentPanel::CInstrumentPanel(BOOL useTurnAndSlip, CNudgeCollection* nudges
 	float yNudgeLower = 25.0f;
 	float yNudgeUpper = 25.0f;
 	float yNudgeCenter = 20.0f;
+
+	CInstrument::m_brightness = dBrightness;
 
 	CNudge* pNudge = nudges->Find(RPMINSTRUMENT_ID);
 	CRPMInstrument* pRPM;
@@ -276,6 +278,7 @@ CInstrument* CInstrumentPanel::FindFocussedInstrument()
 	}
 	return NULL;
 }
+
 
 HRESULT CInstrumentPanel::Render(bool bDesign)
 {

@@ -4,6 +4,9 @@
 
 extern UINT nBackgroundCard;
 
+double CInstrument::m_brightness = 0.0;
+
+
 CInstrument::CInstrument(float Scale, int instrumentId)
 {
 	m_instrumentId = instrumentId;
@@ -13,6 +16,7 @@ CInstrument::CInstrument(float Scale, int instrumentId)
 	this->m_nudge_x = 0;
 	this->m_nudge_y = 0;
 	m_bHasFocus = false;
+	
 }
 
 
@@ -52,6 +56,12 @@ HRESULT CInstrument::Initialise(CInstrumentPanelContext* pContext)
 
 	return hr;
 }
+
+D2D1::ColorF CInstrument::GetInstrumentColor()
+{
+	return D2D1::ColorF(((BYTE)(255.0 * m_brightness) & 0xFF) << 16 | ((BYTE)(255.0 * m_brightness) & 0xFF) << 8 | ((BYTE)(255.0 * m_brightness) & 0xFF));
+}
+
 
 HRESULT CInstrument::Update(FSX_SIM_DATA* fsxData)
 {
