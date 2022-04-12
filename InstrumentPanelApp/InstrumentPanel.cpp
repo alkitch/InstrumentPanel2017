@@ -239,12 +239,16 @@ HRESULT CInstrumentPanel::Update(FSX_SIM_DATA* pSimData)
 
 bool CInstrumentPanel::GetDesktopDpi(float& dpiX, float& dpiY)
 {
-	if (m_context.m_pDirect2dFactory != NULL)
-	{
-		m_context.m_pDirect2dFactory->GetDesktopDpi(&dpiX, &dpiY);
+	//if (m_context.m_pDirect2dFactory != NULL)
+	//{
+	//	m_context.m_pDirect2dFactory->GetDesktopDpi(&dpiX, &dpiY);
+		dpiX = (FLOAT)GetDpiForWindow(GetDesktopWindow());
+		dpiY = dpiX;
+
+
 		return true;
-	}
-	return false;
+	//}
+	//return false;
 }
 
 CInstrument* CInstrumentPanel::FindBoundedInstrument(POINT pt)
